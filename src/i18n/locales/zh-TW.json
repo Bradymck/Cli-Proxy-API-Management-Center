@@ -554,7 +554,6 @@
     "reset_confirm_button": "確認重置",
     "reset_not_confirmed": "尚未確認額度重置成功，請重新整理額度後再決定是否重試。",
     "reset_cooldown_failed": "額度已重置，但代理冷卻清除失敗。請在原連線的認證檔案頁面使用「清除冷卻」，不要再次消耗重置卡。",
-
     "reset_success": "已重置「{{name}}」的 Codex 配額",
     "reset_failed": "重置「{{name}}」的 Codex 配額失敗：{{message}}",
     "plan_plus": "Plus",
@@ -1695,7 +1694,26 @@
     "weekday_wed": "三",
     "weekday_thu": "四",
     "weekday_fri": "五",
-    "weekday_sat": "六"
+    "weekday_sat": "六",
+    "view_label": "檢視",
+    "view_ledger": "帳本",
+    "view_even": "等高列",
+    "view_stacked": "堆疊",
+    "view_compact": "緊湊",
+    "show_emails": "顯示信箱",
+    "hide_emails": "隱藏信箱",
+    "ledger_credentials_other": "{{count}} 個憑證",
+    "ledger_of": "共 {{max}}%",
+    "ledger_primary_default": "每週限額",
+    "ledger_weekly_limit": "每週限額",
+    "ledger_monthly_limit": "每月限額",
+    "ledger_no_reset": "尚無重置",
+    "ledger_next_up": "下一個",
+    "ledger_next_up_hint": "最先重置，請求將優先路由至此",
+    "ledger_show": "展開",
+    "ledger_hide": "收合",
+    "ledger_summary_label": "提供者摘要",
+    "ledger_credentials_one": "{{count}} 個憑證"
   },
   "routing": {
     "title": "路由編排",
@@ -2151,7 +2169,7 @@
       "activeCount": "{{active}}/{{total}} 活躍"
     },
     "providerNames": {
-       "aiCodeMirror": "AIcodemirror",
+      "aiCodeMirror": "AIcodemirror",
       "meta": "Muse (Meta)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
@@ -2214,8 +2232,8 @@
       "urlMode": "{{provider}} URL",
       "urlHint": "不同 URL 的使用規範一致,儲存時只會寫入目前分組協議對應位址。",
       "urlOptions": {
-         "aiCodeMirrorGlobal": "全球高保線路",
-         "aiCodeMirrorDomestic": "國內優化線路",
+        "aiCodeMirrorGlobal": "全球高保線路",
+        "aiCodeMirrorDomestic": "國內優化線路",
         "standard": "普通 URL",
         "direct": "專線直連 URL",
         "domestic": "中國大陸線路",
@@ -2224,8 +2242,8 @@
         "global": "全球"
       },
       "urlOptionDescriptions": {
-         "aiCodeMirrorGlobal": "適用於全球存取的高防護線路。",
-         "aiCodeMirrorDomestic": "針對中國大陸網路最佳化的線路。",
+        "aiCodeMirrorGlobal": "適用於全球存取的高防護線路。",
+        "aiCodeMirrorDomestic": "針對中國大陸網路最佳化的線路。",
         "domestic": "面向中國大陸使用者和部署在中國大陸網路環境中的業務，通常可獲得更低延遲。",
         "overseas": "面向海外部署、跨境存取或需要存取境外模型的業務。",
         "mainlandChinaRecommended": "推薦中國大陸使用者和部署在中國大陸網路環境中的業務使用。",

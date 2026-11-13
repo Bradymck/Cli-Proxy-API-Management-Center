@@ -1686,7 +1686,28 @@
     "weekday_wed": "Ср",
     "weekday_thu": "Чт",
     "weekday_fri": "Пт",
-    "weekday_sat": "Сб"
+    "weekday_sat": "Сб",
+    "view_label": "Вид",
+    "view_ledger": "Журнал",
+    "view_even": "Ровные строки",
+    "view_stacked": "Столбцами",
+    "view_compact": "Компактно",
+    "show_emails": "Показать email",
+    "hide_emails": "Скрыть email",
+    "ledger_credentials_one": "{{count}} учётные данные",
+    "ledger_credentials_few": "{{count}} учётные данные",
+    "ledger_credentials_many": "{{count}} учётных данных",
+    "ledger_credentials_other": "{{count}} учётных данных",
+    "ledger_of": "из {{max}}%",
+    "ledger_primary_default": "Недельный лимит",
+    "ledger_weekly_limit": "Недельный лимит",
+    "ledger_monthly_limit": "Месячный лимит",
+    "ledger_no_reset": "Сброс не ожидается",
+    "ledger_next_up": "Следующий",
+    "ledger_next_up_hint": "Сбрасывается раньше всех, поэтому запросы идут сюда первыми",
+    "ledger_show": "Показать",
+    "ledger_hide": "Скрыть",
+    "ledger_summary_label": "Сводка по провайдерам"
   },
   "routing": {
     "title": "Маршрутизация",
@@ -2133,7 +2154,7 @@
       "activeCount": "{{active}}/{{total}} активных"
     },
     "providerNames": {
-       "aiCodeMirror": "AIcodemirror",
+      "aiCodeMirror": "AIcodemirror",
       "meta": "Muse (Meta)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
@@ -2196,8 +2217,8 @@
       "urlMode": "{{provider}} URL",
       "urlHint": "Все URL используют одинаковые правила API. При сохранении записывается только endpoint текущего группового протокола.",
       "urlOptions": {
-         "aiCodeMirrorGlobal": "Глобальный маршрут с усиленной защитой",
-         "aiCodeMirrorDomestic": "Оптимизированный маршрут для материкового Китая",
+        "aiCodeMirrorGlobal": "Глобальный маршрут с усиленной защитой",
+        "aiCodeMirrorDomestic": "Оптимизированный маршрут для материкового Китая",
         "standard": "Обычный URL",
         "direct": "Прямой URL",
         "domestic": "Маршрут для материкового Китая",
@@ -2206,8 +2227,8 @@
         "global": "Глобальный"
       },
       "urlOptionDescriptions": {
-         "aiCodeMirrorGlobal": "Маршрут с усиленной защитой для доступа по всему миру.",
-         "aiCodeMirrorDomestic": "Маршрут, оптимизированный для сетей материкового Китая.",
+        "aiCodeMirrorGlobal": "Маршрут с усиленной защитой для доступа по всему миру.",
+        "aiCodeMirrorDomestic": "Маршрут, оптимизированный для сетей материкового Китая.",
         "domestic": "Для пользователей и нагрузок в материковом Китае; обычно дает меньшую задержку в сетях материкового Китая.",
         "overseas": "Для зарубежных развертываний, трансграничного доступа или задач, которым нужны зарубежные модели.",
         "mainlandChinaRecommended": "Рекомендуется для пользователей и нагрузок в сетях материкового Китая.",

@@ -1629,7 +1629,26 @@
     "search_placeholder": "Tìm theo tên file hoặc email",
     "search_empty_title": "Không có tài khoản phù hợp",
     "search_empty_desc": "Hãy thử tên file hoặc email khác, hoặc xóa tìm kiếm.",
-    "search_clear": "Xóa tìm kiếm"
+    "search_clear": "Xóa tìm kiếm",
+    "view_label": "Chế độ xem",
+    "view_ledger": "Sổ cái",
+    "view_even": "Hàng đều",
+    "view_stacked": "Xếp chồng",
+    "view_compact": "Gọn",
+    "show_emails": "Hiện email",
+    "hide_emails": "Ẩn email",
+    "ledger_credentials_other": "{{count}} thông tin xác thực",
+    "ledger_of": "trên {{max}}%",
+    "ledger_primary_default": "Giới hạn tuần",
+    "ledger_weekly_limit": "Giới hạn tuần",
+    "ledger_monthly_limit": "Giới hạn tháng",
+    "ledger_no_reset": "Chưa có đặt lại",
+    "ledger_next_up": "Kế tiếp",
+    "ledger_next_up_hint": "Đặt lại sớm nhất nên yêu cầu được định tuyến tới đây trước",
+    "ledger_show": "Hiện",
+    "ledger_hide": "Ẩn",
+    "ledger_summary_label": "Tóm tắt nhà cung cấp",
+    "ledger_credentials_one": "{{count}} thông tin xác thực"
   },
   "routing": {
     "title": "Định tuyến",
@@ -2001,7 +2020,7 @@
       "activeCount": "{{active}}/{{total}} đang hoạt động"
     },
     "providerNames": {
-       "aiCodeMirror": "AIcodemirror",
+      "aiCodeMirror": "AIcodemirror",
       "gemini": "Gemini",
       "interactions": "Interactions API",
       "codex": "Codex",
@@ -2067,8 +2086,8 @@
       "urlMode": "URL {{provider}}",
       "urlHint": "Mọi URL dùng cùng quy ước API. Lưu chỉ ghi endpoint của giao thức được nhóm hiện tại.",
       "urlOptions": {
-         "aiCodeMirrorGlobal": "Tuyến toàn cầu được bảo vệ cao",
-         "aiCodeMirrorDomestic": "Tuyến tối ưu cho Trung Quốc đại lục",
+        "aiCodeMirrorGlobal": "Tuyến toàn cầu được bảo vệ cao",
+        "aiCodeMirrorDomestic": "Tuyến tối ưu cho Trung Quốc đại lục",
         "standard": "URL chuẩn",
         "direct": "URL trực tiếp",
         "domestic": "Tuyến Trung Quốc đại lục",
@@ -2077,8 +2096,8 @@
         "global": "Toàn cầu"
       },
       "urlOptionDescriptions": {
-         "aiCodeMirrorGlobal": "Tuyến có mức bảo vệ cao dành cho truy cập toàn cầu.",
-         "aiCodeMirrorDomestic": "Tuyến được tối ưu cho mạng tại Trung Quốc đại lục.",
+        "aiCodeMirrorGlobal": "Tuyến có mức bảo vệ cao dành cho truy cập toàn cầu.",
+        "aiCodeMirrorDomestic": "Tuyến được tối ưu cho mạng tại Trung Quốc đại lục.",
         "domestic": "Dành cho người dùng và khối lượng công việc tại Trung Quốc đại lục; thường có độ trễ thấp hơn trên mạng đại lục.",
         "overseas": "Dành cho triển khai nước ngoài, truy cập xuyên biên giới hoặc khối lượng công việc cần model nước ngoài.",
         "mainlandChinaRecommended": "Khuyến nghị cho người dùng và khối lượng công việc trên mạng Trung Quốc đại lục.",

@@ -12,13 +12,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { authFilesApi } from '@/services/api';
 import { Button } from '@/components/ui/Button';
-import { CardLayoutSwitch } from '@/components/ui/CardLayoutSwitch';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { IconSearch, IconX } from '@/components/ui/icons';
 import { Select } from '@/components/ui/Select';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { StackedColumns } from '@/components/ui/StackedColumns';
-import { readCardLayout, writeCardLayout, type CardLayout } from '@/components/ui/cardLayout';
+import type { CardLayout } from '@/components/ui/cardLayout';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { useNow } from '@/hooks/useNow';
 import { useRevealGroup } from '@/hooks/motion';
@@ -29,13 +28,17 @@ import { ProviderTabs } from '@/features/authFiles/components/ProviderTabs';
 import { QuotaHeader } from './components/QuotaHeader';
 import { QuotaCard } from './components/QuotaCard';
 import { QuotaTimeline } from './components/QuotaTimeline';
+import { QuotaLedger } from './components/QuotaLedger';
 import {
   CARD_ENTRANCE_BUDGET_MS,
-  QUOTA_CARD_LAYOUT_KEY,
   QUOTA_COMPACT_COLUMNS,
   QUOTA_PAGE_SIZE,
   QUOTA_STACKED_COLUMNS,
   QUOTA_SORT_MODES,
+  QUOTA_VIEWS,
+  readQuotaView,
+  writeQuotaView,
+  type QuotaView,
   QUOTA_TAB_ORDER,
   type QuotaSortMode,
   type QuotaTabId,
@@ -51,6 +54,7 @@ import {
   type QuotaFileEntry,
 } from './logic';
 import { nextRecoveryMs } from './resetSchedule';
+import { buildLedgerColumns, pickNextUpKeys, sortLedgerEntries } from './ledger';
 import { QUOTA_ADAPTERS, getQuotaSetter, type QuotaCardState } from './providers';
 import {
   codexCreditOverageKey,
@@ -86,7 +90,10 @@ export function QuotaPage() {
   );
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [layout, setLayout] = useState<CardLayout>(() => readCardLayout(QUOTA_CARD_LAYOUT_KEY));
+  const [view, setView] = useState<QuotaView>(readQuotaView);
+  const [showEmails, setShowEmails] = useState(false);
+  const isLedger = view === 'ledger';
+  const layout: CardLayout = view === 'ledger' ? 'even' : view;
   // Compact cards the user opened to full size; not persisted.
   const [expandedCards, setExpandedCards] = useState<ReadonlySet<string>>(() => new Set());
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -182,8 +189,8 @@ export function QuotaPage() {
 
   // 只在「最快恢复优先」下订阅分钟时钟。默认序下不门控的话，pageItems 每分钟
   // 换一次身份，会反复空转下面那个「刷新全部」的 loading 下降沿 effect。
-  const tick = useNow(sortMode !== 'default');
-  const sortNow = sortMode === 'default' ? 0 : tick;
+  const tick = useNow(sortMode !== 'default' || isLedger);
+  const sortNow = sortMode === 'default' && !isLedger ? 0 : tick;
 
   const entries = useMemo(() => classifyQuotaFiles(files), [files]);
   const tabCounts = useMemo(() => buildTabCounts(entries), [entries]);
@@ -209,10 +216,33 @@ export function QuotaPage() {
     [getQuota, sortNow]
   );
   // 排序在分页之前：否则「最快恢复」只在当前页内成立。
-  const sortedEntries = useMemo(
-    () => sortQuotaEntries(filteredEntries, sortMode, resolveNextRecovery),
-    [filteredEntries, sortMode, resolveNextRecovery]
+  const columnsFor = useCallback(
+    (entry: QuotaFileEntry) => buildLedgerColumns(entry.type, getQuota(entry)),
+    [getQuota]
   );
+  const sortedEntries = useMemo(
+    () =>
+      isLedger
+        ? sortLedgerEntries(
+            filteredEntries,
+            (entry) => columnsFor(entry).primary?.resetAtMs ?? null,
+            sortNow
+          )
+        : sortQuotaEntries(filteredEntries, sortMode, resolveNextRecovery),
+    [filteredEntries, isLedger, sortMode, resolveNextRecovery, columnsFor, sortNow]
+  );
+  // The server routes to the credential whose 7-day window resets soonest, so flag it.
+  const nextUpKeys = useMemo(
+    () =>
+      pickNextUpKeys(
+        filteredEntries,
+        (entry) => `${entry.type}:${getQuotaCacheKey(entry.file)}`,
+        columnsFor,
+        sortNow
+      ),
+    [filteredEntries, columnsFor, sortNow]
+  );
+  const tabEntries = useMemo(() => filterEntriesByTab(entries, tab), [entries, tab]);
 
   const { pageItems, currentPage, totalPages } = useMemo(
     () => paginate(sortedEntries, page, QUOTA_PAGE_SIZE),
@@ -231,9 +261,9 @@ export function QuotaPage() {
     writeQuotaUiState({ sortMode: next as QuotaSortMode });
   }, []);
 
-  const handleLayoutChange = useCallback((next: CardLayout) => {
-    setLayout(next);
-    writeCardLayout(QUOTA_CARD_LAYOUT_KEY, next);
+  const handleViewChange = useCallback((next: string) => {
+    setView(next as QuotaView);
+    writeQuotaView(next as QuotaView);
   }, []);
 
   const toggleExpandedCard = useCallback((key: string) => {
@@ -247,6 +277,11 @@ export function QuotaPage() {
   const sortOptions = useMemo(
     () =>
       QUOTA_SORT_MODES.map((mode) => ({ value: mode, label: t(`quota_management.sort_${mode}`) })),
+    [t]
+  );
+
+  const viewOptions = useMemo(
+    () => QUOTA_VIEWS.map((mode) => ({ value: mode, label: t(`quota_management.view_${mode}`) })),
     [t]
   );
 
@@ -390,6 +425,8 @@ export function QuotaPage() {
         attentionCount={attentionCount}
         refreshing={loading || batchLoading}
         disableControls={disableControls}
+        showEmails={isLedger ? showEmails : undefined}
+        onToggleShowEmails={() => setShowEmails((value) => !value)}
         onRefreshAll={handleRefreshAll}
       />
 
@@ -433,16 +470,26 @@ export function QuotaPage() {
             )}
           </div>
           <div className={styles.viewControls}>
+            {!isLedger && (
+              <div className={styles.sort}>
+                <Select
+                  value={sortMode}
+                  options={sortOptions}
+                  onChange={handleSortModeChange}
+                  ariaLabel={t('quota_management.sort_label')}
+                  size="sm"
+                />
+              </div>
+            )}
             <div className={styles.sort}>
               <Select
-                value={sortMode}
-                options={sortOptions}
-                onChange={handleSortModeChange}
-                ariaLabel={t('quota_management.sort_label')}
+                value={view}
+                options={viewOptions}
+                onChange={handleViewChange}
+                ariaLabel={t('quota_management.view_label')}
                 size="sm"
               />
             </div>
-            <CardLayoutSwitch value={layout} onChange={handleLayoutChange} />
           </div>
         </div>
 
@@ -485,6 +532,20 @@ export function QuotaPage() {
                 </Button>
               )
             }
+          />
+        ) : isLedger ? (
+          <QuotaLedger
+            entries={pageItems}
+            summaryEntries={tabEntries}
+            nextUpKeys={nextUpKeys}
+            getQuota={getQuota}
+            keyOf={cardKey}
+            resolvedTheme={resolvedTheme}
+            showEmails={showEmails}
+            nowMs={tick}
+            canRefresh={canUseActions}
+            resettingName={resettingQuotaName}
+            onRefresh={(entry) => void refreshQuota(entry.file, QUOTA_ADAPTERS[entry.type])}
           />
         ) : (
           // One container for every layout, so switching layouts never remounts the cards.
