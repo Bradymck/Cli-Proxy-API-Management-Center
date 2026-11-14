@@ -129,7 +129,28 @@ function SummaryCard({
   const [showExtra, setShowExtra] = useState(false);
   const label = getTypeLabel(t, summary.type);
   const empty = summary.primaryTotal === null;
-  const total = empty ? '--' : `${Math.round(summary.primaryTotal ?? 0)}%`;
+  const single = summary.credentialCount === 1;
+  const total = empty
+    ? '--'
+    : single
+      ? t('quota_management.ledger_percent_left', {
+          percent: Math.round(summary.primaryAvgPercent ?? 0),
+        })
+      : t('quota_management.ledger_accounts_left', {
+          left: (summary.primaryAccountsLeft ?? 0).toFixed(1),
+          total: summary.credentialCount,
+        });
+  const extraText =
+    summary.tertiaryAccountsLeft === null
+      ? ''
+      : single
+        ? t('quota_management.ledger_percent_left', {
+            percent: Math.round(summary.tertiaryAvgPercent ?? 0),
+          })
+        : t('quota_management.ledger_accounts_left_short', {
+            left: summary.tertiaryAccountsLeft.toFixed(1),
+            total: summary.credentialCount,
+          });
   const hasExtra = summary.tertiaryTotal !== null && summary.tertiaryLabel !== null;
 
   return (
@@ -146,9 +167,13 @@ function SummaryCard({
       </div>
       <div className={styles.summaryTotal}>
         <span className={styles.summaryTotalValue}>{total}</span>
-        <span className={styles.summaryTotalMax}>
-          {t('quota_management.ledger_of', { max: summary.primaryMax })}
-        </span>
+        {!empty && !single && (
+          <span className={styles.summaryTotalMax}>
+            {t('quota_management.ledger_avg_percent', {
+              percent: Math.round(summary.primaryAvgPercent ?? 0),
+            })}
+          </span>
+        )}
       </div>
       <SegmentedBar segments={summary.segments} />
       <div className={styles.summaryReset}>
@@ -161,7 +186,15 @@ function SummaryCard({
               {windowLabel(t, summary.tertiaryLabel, 'quota_management.ledger_primary_default')}
             </span>
             <span className={styles.summaryExtraValue}>
-              {Math.round(summary.tertiaryTotal ?? 0)}%
+              {extraText}
+              {!single && summary.tertiaryAvgPercent !== null && (
+                <span className={styles.summaryTotalMax}>
+                  {' · '}
+                  {t('quota_management.ledger_avg_percent', {
+                    percent: Math.round(summary.tertiaryAvgPercent),
+                  })}
+                </span>
+              )}
             </span>
             <button
               type="button"

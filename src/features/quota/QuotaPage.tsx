@@ -69,6 +69,7 @@ import styles from './QuotaPage.module.scss';
 
 const TAB_IDS: string[] = ['all', ...QUOTA_TAB_ORDER];
 const SKELETON_CARD_COUNT = 6;
+const QUOTA_AUTO_REFRESH_MS = 5 * 60 * 1000;
 
 /**
  * Existing providers display filenames; Devin's card and timeline share an
@@ -194,6 +195,11 @@ export function QuotaPage() {
 
   const entries = useMemo(() => classifyQuotaFiles(files), [files]);
   const tabCounts = useMemo(() => buildTabCounts(entries), [entries]);
+  // Hide providers with no credentials; keep "All" and whatever tab is active.
+  const visibleTabIds = useMemo(
+    () => TAB_IDS.filter((id) => id === 'all' || id === tab || (tabCounts[id] ?? 0) > 0),
+    [tabCounts, tab]
+  );
   // Account-level settings span every page and tab, so count over all entries.
   const codexCreditOverageCounts = useMemo(
     () =>
@@ -358,6 +364,35 @@ export function QuotaPage() {
     }
   }, [disableControls, error, filesGeneration, loading, loadQuota, pageItems, sessionGeneration]);
 
+  /* ---------- Auto-load + 5 min auto-refresh ----------
+   * Same action as "Refresh all credentials". Skips while a refresh is in flight or
+   * the tab is hidden. */
+  const autoRefreshBusyRef = useRef(false);
+  const autoLoadedRef = useRef<number | null>(null);
+  const handleRefreshAllRef = useRef(handleRefreshAll);
+  useEffect(() => {
+    autoRefreshBusyRef.current = loading || batchLoading;
+    handleRefreshAllRef.current = handleRefreshAll;
+  });
+  const canAutoRefresh = !disableControls && !loading && filesGeneration === sessionGeneration;
+
+  useEffect(() => {
+    if (!canAutoRefresh || error || entries.length === 0 || loadedCount > 0) return;
+    if (autoLoadedRef.current === sessionGeneration) return;
+    if (autoRefreshBusyRef.current || document.hidden) return;
+    autoLoadedRef.current = sessionGeneration;
+    handleRefreshAllRef.current();
+  }, [canAutoRefresh, error, entries.length, loadedCount, sessionGeneration]);
+
+  useEffect(() => {
+    if (disableControls) return;
+    const id = window.setInterval(() => {
+      if (document.hidden || autoRefreshBusyRef.current) return;
+      handleRefreshAllRef.current();
+    }, QUOTA_AUTO_REFRESH_MS);
+    return () => window.clearInterval(id);
+  }, [disableControls, sessionGeneration]);
+
   useDevinQuotaAutoLoad(
     pageItems,
     disableControls ||
@@ -434,7 +469,7 @@ export function QuotaPage() {
         {/* 提供商导航与搜索工具栏分层，避免不同控件争夺视觉焦点。 */}
         <div className={styles.tabsRow} data-reveal>
           <ProviderTabs
-            types={TAB_IDS}
+            types={visibleTabIds}
             counts={tabCounts}
             active={tab}
             resolvedTheme={resolvedTheme}

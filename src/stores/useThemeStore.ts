@@ -19,10 +19,9 @@ interface ThemeState {
 }
 
 const getSystemTheme = (): ResolvedTheme => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
+  if (typeof window === 'undefined' || !window.matchMedia) return 'dark';
+  // Dark unless the system explicitly asks for light.
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 };
 
 const resolveAutoTheme = (): AppliedTheme => {
@@ -61,7 +60,7 @@ export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
       theme: 'auto',
-      resolvedTheme: 'light',
+      resolvedTheme: 'dark',
 
       setTheme: (theme) => {
         const resolved = resolveTheme(theme);

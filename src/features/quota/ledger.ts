@@ -338,6 +338,12 @@ export interface LedgerSummary {
   /** Sum of remaining percent across loaded credentials; null when nothing is loaded. */
   primaryTotal: number | null;
   primaryMax: number;
+  /** Accounts' worth of capacity left (sum of remaining fractions); null when nothing is loaded. */
+  primaryAccountsLeft: number | null;
+  /** Mean remaining percent across loaded credentials; null when nothing is loaded. */
+  primaryAvgPercent: number | null;
+  tertiaryAccountsLeft: number | null;
+  tertiaryAvgPercent: number | null;
   tertiaryTotal: number | null;
   tertiaryLabel: LedgerWindow | null;
   /** One segment per credential, in ledger order. */
@@ -358,20 +364,26 @@ export function buildLedgerSummary(
   const upcoming = loaded
     .map((item) => item.columns.primary?.resetAtMs ?? null)
     .filter((ms): ms is number => ms !== null && ms > nowMs);
+  const primaryTotal =
+    loaded.length > 0
+      ? sum(loaded.map((item) => item.columns.primary?.remainingPercent ?? null))
+      : null;
+  const tertiaryTotal =
+    tertiaryLoaded.length > 0
+      ? sum(tertiaryLoaded.map((item) => item.columns.tertiary?.remainingPercent ?? null))
+      : null;
   return {
     type,
     credentialCount: items.length,
     loadedCount: loaded.length,
     primaryLabel: loaded[0]?.columns.primary ?? null,
-    primaryTotal:
-      loaded.length > 0
-        ? sum(loaded.map((item) => item.columns.primary?.remainingPercent ?? null))
-        : null,
+    primaryTotal,
     primaryMax: items.length * 100,
-    tertiaryTotal:
-      tertiaryLoaded.length > 0
-        ? sum(tertiaryLoaded.map((item) => item.columns.tertiary?.remainingPercent ?? null))
-        : null,
+    primaryAccountsLeft: primaryTotal === null ? null : primaryTotal / 100,
+    primaryAvgPercent: primaryTotal === null ? null : primaryTotal / loaded.length,
+    tertiaryAccountsLeft: tertiaryTotal === null ? null : tertiaryTotal / 100,
+    tertiaryAvgPercent: tertiaryTotal === null ? null : tertiaryTotal / tertiaryLoaded.length,
+    tertiaryTotal,
     tertiaryLabel: tertiaryLoaded[0]?.columns.tertiary ?? null,
     segments: items.map((item) => ({
       key: item.key,
