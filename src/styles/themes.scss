@@ -165,29 +165,29 @@
 // 深色主题（#191919）
 [data-theme='dark'] {
   // 极简暖灰：深色模式（提升对比度与层级）
-  --bg-secondary: #151412; // 页面背景
-  --bg-primary: #1d1b18; // 容器/卡片背景
-  --bg-tertiary: #262320; // hover/次级背景
-  --bg-hover: #2e2a26;
-  --bg-quinary: #191714;
+  --bg-secondary: #09090a; // page: near-black
+  --bg-primary: #101011; // surfaces/cards
+  --bg-tertiary: #18181a; // hover/secondary
+  --bg-hover: #1f1f22;
+  --bg-quinary: #0d0d0e;
   --bg-error-light: rgba(198, 87, 70, 0.18);
-  --floating-surface: #2a2723;
+  --floating-surface: #161618;
   --floating-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
 
-  --text-primary: #f6f4f1;
-  --text-secondary: #c9c3bb;
-  --text-tertiary: #9c958d;
-  --text-quaternary: #6f6962;
+  --text-primary: #fafafa;
+  --text-secondary: #c4c4c8;
+  --text-tertiary: #8c8c93;
+  --text-quaternary: #5c5c63;
   --text-muted: var(--text-tertiary);
 
-  --border-color: #3a3530;
+  --border-color: #222225;
   --border-secondary: var(--border-color);
-  --border-primary: #4a453f;
-  --border-hover: #5a544d;
+  --border-primary: #303034;
+  --border-hover: #424248;
 
-  --primary-color: #8b8680;
-  --primary-hover: #9a948e;
-  --primary-active: #a6a099;
+  --primary-color: #9a9aa2;
+  --primary-hover: #aaaab1;
+  --primary-active: #b8b8be;
   --primary-contrast: #ffffff;
 
   --success-color: #10b981;

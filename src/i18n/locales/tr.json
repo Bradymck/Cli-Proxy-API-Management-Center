@@ -1673,7 +1673,30 @@
     "weekday_wed": "Çar",
     "weekday_thu": "Per",
     "weekday_fri": "Cum",
-    "weekday_sat": "Cmt"
+    "weekday_sat": "Cmt",
+    "view_label": "Görünüm",
+    "view_ledger": "Defter",
+    "view_even": "Eşit satırlar",
+    "view_stacked": "Yığılmış",
+    "view_compact": "Kompakt",
+    "show_emails": "E-postaları göster",
+    "hide_emails": "E-postaları gizle",
+    "ledger_credentials_one": "{{count}} kimlik bilgisi",
+    "ledger_credentials_other": "{{count}} kimlik bilgisi",
+    "ledger_of": "/ %{{max}}",
+    "ledger_accounts_left": "{{left}} of {{total}} accounts left",
+    "ledger_accounts_left_short": "{{left}} of {{total}} left",
+    "ledger_percent_left": "{{percent}}% left",
+    "ledger_avg_percent": "avg {{percent}}%",
+    "ledger_primary_default": "Haftalık limit",
+    "ledger_weekly_limit": "Haftalık limit",
+    "ledger_monthly_limit": "Aylık limit",
+    "ledger_no_reset": "Bekleyen sıfırlama yok",
+    "ledger_next_up": "Sıradaki",
+    "ledger_next_up_hint": "En erken sıfırlanır, bu yüzden istekler önce buraya yönlendirilir",
+    "ledger_show": "Göster",
+    "ledger_hide": "Gizle",
+    "ledger_summary_label": "Sağlayıcı özeti"
   },
   "routing": {
     "title": "Yönlendirme",
@@ -2129,7 +2152,7 @@
       "activeCount": "{{active}} / {{total}} Aktif"
     },
     "providerNames": {
-       "aiCodeMirror": "AIcodemirror",
+      "aiCodeMirror": "AIcodemirror",
       "meta": "Muse (Meta)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
@@ -2192,8 +2215,8 @@
       "urlMode": "{{provider}} URL'si",
       "urlHint": "Tüm URL'ler Aynı API Kurallarını Kullanır. Kayıt Yalnızca Geçerli Gruplanmış Protokolün Uç Noktasını Yazar.",
       "urlOptions": {
-         "aiCodeMirrorGlobal": "Yüksek Korumalı Küresel Rota",
-         "aiCodeMirrorDomestic": "Çin Ana Karası için Optimize Edilmiş Rota",
+        "aiCodeMirrorGlobal": "Yüksek Korumalı Küresel Rota",
+        "aiCodeMirrorDomestic": "Çin Ana Karası için Optimize Edilmiş Rota",
         "standard": "Standart URL",
         "direct": "Doğrudan URL",
         "domestic": "Çin Ana Karası Rotası",
@@ -2202,8 +2225,8 @@
         "global": "Küresel"
       },
       "urlOptionDescriptions": {
-         "aiCodeMirrorGlobal": "Küresel erişim için yüksek korumalı bir rota.",
-         "aiCodeMirrorDomestic": "Çin ana karasındaki ağlar için optimize edilmiş bir rota.",
+        "aiCodeMirrorGlobal": "Küresel erişim için yüksek korumalı bir rota.",
+        "aiCodeMirrorDomestic": "Çin ana karasındaki ağlar için optimize edilmiş bir rota.",
         "domestic": "Çin Ana Karasındaki Kullanıcılar ve İş Yükleri için. Ana Kara Ağlarında Genellikle Daha Düşük Gecikme.",
         "overseas": "Yurt Dışı Dağıtımlar, Sınır Ötesi Erişim veya Yurt Dışı Modeller Gerektiren İş Yükleri için.",
         "mainlandChinaRecommended": "Çin Ana Karası Ağlarındaki Kullanıcılar ve İş Yükleri için Önerilir.",
